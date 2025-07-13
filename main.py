@@ -208,6 +208,26 @@ async def main():
 
     try:
         driver.get("https://www.ivasms.com/portal/live/my_sms")
+        wait = WebDriverWait(driver, 2)
+
+        try:
+            xpath='//button[@class=\"driver-popover-next-btn\"]'
+            elem = wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
+            wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))
+            elem.click()
+            print("clicked sikp button 1")
+        except:
+            print("no clicked sikp button 2")
+
+        try:
+            xpath='//button[normalize-space(text())=\"Done\"]'
+            elem = wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
+            wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))
+            elem.click()
+            print("clicked sikp button 2")
+        except:
+            print("no clicked sikp button 2")
+
 
         while True:
 
@@ -220,7 +240,7 @@ async def main():
 
             time.sleep(1)
             await send_worker()
-            if refresh_count % 3 == 0:
+            if refresh_count % 10 == 0:
                 driver.save_screenshot("login_page.png")
                 print("screnshort done")
                 try:
