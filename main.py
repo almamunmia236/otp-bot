@@ -19,7 +19,10 @@ PASSWORD = os.getenv("PASSWORD")
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
 
+print("EMAIL:", EMAIL)
+print("PASSWORD:", PASSWORD)
 print("Token:", TELEGRAM_TOKEN)
+print("CHAT_ID:", CHAT_ID)
 
 bot = Bot(token=TELEGRAM_TOKEN)
 
