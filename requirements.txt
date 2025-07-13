@@ -1,4 +1,4 @@
+python-telegram-bot==20.7
 selenium
-python-dotenv
-python-telegram-bot==13.15
 webdriver-manager
+python-dotenv
