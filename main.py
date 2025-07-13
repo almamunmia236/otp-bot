@@ -79,8 +79,9 @@ def load_cookies(driver):
     return False
 
 def init_driver():
+    print("try to open browser")
     options = webdriver.ChromeOptions()
-    profile_path = os.path.abspath(os.path.join("user_data", "simcode"))
+    profile_path = "/tmp/simcode"
     os.makedirs(profile_path, exist_ok=True)
     options.add_argument(f"--user-data-dir={profile_path}")
     options.add_argument("--disable-gpu")
