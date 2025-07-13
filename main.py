@@ -86,10 +86,12 @@ def init_driver():
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--headless') 
-    driver = webdriver.Chrome(
-        service = Service(ChromeDriverManager().install(), port=9515),
-        options=options
-    )
+    options.add_argument("--disable-gpu")
+    options.add_argument("--remote-debugging-port=9222")
+    service = Service(ChromeDriverManager(version="138.0.0").install())
+
+    driver = webdriver.Chrome(service=service, options=options)
+    
     driver.implicitly_wait(10)
     return driver
 
