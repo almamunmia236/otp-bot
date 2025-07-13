@@ -83,17 +83,17 @@ def init_driver():
     profile_path = os.path.abspath(os.path.join("user_data", "simcode"))
     os.makedirs(profile_path, exist_ok=True)
     options.add_argument(f"--user-data-dir={profile_path}")
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
-    options.add_argument('--headless') 
     options.add_argument("--disable-gpu")
-    options.add_argument("--remote-debugging-port=9222")
-    service = Service(ChromeDriverManager(version="138.0.0").install())
+    options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.binary_location = "/usr/bin/chromium"
 
+    service = Service("/usr/bin/chromedriver")
     driver = webdriver.Chrome(service=service, options=options)
-    
-    driver.implicitly_wait(10)
     return driver
+
+
 
 def login(driver):
     driver.get("https://www.ivasms.com/login")
