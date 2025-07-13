@@ -98,18 +98,30 @@ def init_driver():
 
 
 def login(driver):
+    print("starting log in")
     driver.get("https://www.ivasms.com/login")
-    WebDriverWait(driver, 15).until(
+    
+    WebDriverWait(driver, 60).until(
         EC.presence_of_element_located((By.NAME, "email"))
     )
+    time.sleep(10)
+    WebDriverWait(driver, 60).until(
+        EC.presence_of_element_located((By.NAME, "email"))
+    )
+
     driver.find_element(By.NAME, "email").send_keys(EMAIL)
-    WebDriverWait(driver, 15).until(
+    print("email send")
+
+    WebDriverWait(driver, 60).until(
         EC.presence_of_element_located((By.NAME, "password"))
     )
     driver.find_element(By.NAME, "password").send_keys(PASSWORD)
+    print("password send")
     driver.find_element(By.CSS_SELECTOR, "button[type='submit']").click()
-    time.sleep(3)
+    time.sleep(10)
     driver.get("https://www.ivasms.com/portal/live/my_sms")
+    print(driver.current_url)
+
     print("✅ Logged in successfully.")
     save_cookies(driver)
 
@@ -161,13 +173,22 @@ async def main():
         return
 
     driver = init_driver()
+    print("🌐 Checking network...")
+    driver.get("https://example.com")
+    print("✅ Got example.com")
 
     # Load cookies or login
     driver.get("https://www.ivasms.com/portal/live/my_sms")
+
+    driver.save_screenshot("login_page.png")
+    print("📸 Screenshot saved!")
+
     if load_cookies(driver):
         driver.refresh()
         driver.get("https://www.ivasms.com/portal/live/my_sms")
         time.sleep(5)
+        print(driver.current_url)
+
         if "/portal/live/my_sms" not in driver.current_url:
             print("🔄 Session expired, logging in...")
             login(driver)
