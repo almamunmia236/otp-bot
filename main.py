@@ -12,6 +12,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 import re
 from telegram.constants import ParseMode
+from telegram.request import HTTPXRequest
+from telegram.error import NetworkError
 # Load environment variables
 
 EMAIL = os.getenv("EMAIL")
@@ -24,7 +26,8 @@ print("PASSWORD:", PASSWORD)
 print("Token:", TELEGRAM_TOKEN)
 print("CHAT_ID:", CHAT_ID)
 
-bot = Bot(token=TELEGRAM_TOKEN)
+request = HTTPXRequest(connect_timeout=10.0, read_timeout=20.0)  # default 5
+bot = Bot(token=TELEGRAM_TOKEN, request=request)
 
 COOKIE_FILE = "selenium_cookies.pkl"
 otp_storage = []
@@ -180,8 +183,8 @@ async def main():
     # Load cookies or login
     driver.get("https://www.ivasms.com/portal/live/my_sms")
 
-    driver.save_screenshot("login_page.png")
-    print("📸 Screenshot saved!")
+    print("✅ Got ivas.com")
+
 
     if load_cookies(driver):
         driver.refresh()
@@ -215,12 +218,27 @@ async def main():
                 otp_storage.append(msg)
                 seen.add(msg)
 
-            refresh_count += 1
             time.sleep(1)
             await send_worker()
-            if refresh_count % 30 == 0:
-                print("refreshing")
+            if refresh_count % 3 == 0:
+                driver.save_screenshot("login_page.png")
+                print("screnshort done")
+                try:
+                    with open("login_page.png", "rb") as photo:
+                        await bot.send_photo(chat_id="6427564982", photo=photo)
+                except NetworkError as e:
+                    print("❌ Telegram NetworkError:", e)
+                    print("⏳ Retrying in 5 seconds...")
+                    await asyncio.sleep(5)
+                    try:
+                        with open("login_page.png", "rb") as photo:
+                            await bot.send_photo(chat_id="6427564982", photo=photo)
+                    except Exception as ex:
+                        print("❌ Failed again:", ex)
+
                 driver.refresh()
+
+            refresh_count += 1
 
     except KeyboardInterrupt:
         print("🛑 Interrupted by user, exiting.")
