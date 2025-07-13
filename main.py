@@ -13,7 +13,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 import re
 from telegram.constants import ParseMode
 # Load environment variables
-load_dotenv()
 
 EMAIL = os.getenv("EMAIL")
 PASSWORD = os.getenv("PASSWORD")
