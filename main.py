@@ -20,6 +20,8 @@ PASSWORD = os.getenv("PASSWORD")
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
 
+print("Token:", TELEGRAM_TOKEN)
+
 bot = Bot(token=TELEGRAM_TOKEN)
 
 COOKIE_FILE = "selenium_cookies.pkl"
