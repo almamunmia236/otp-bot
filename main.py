@@ -131,9 +131,8 @@ def login(driver):
 def fetch_messages(driver):
 
 
-    wait = WebDriverWait(driver, 5)
+    wait = WebDriverWait(driver, 3)
     driver.execute_script("window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });")
-    time.sleep(3)
     driver.execute_script("window.scrollTo({ top: 0, behavior: 'smooth' });")
     try:
         # tergetNumber='//tbody[@id="LiveTestSMS"]//tr[.//p[text()="2250153708770"]]/td[5]'
@@ -152,7 +151,7 @@ def fetch_messages(driver):
             code = match.group(1)
             print("OTP Code:", code)
         else:
-            print("Code not found")
+            code="None"
 
         new_data = {
                     "number": Number,
@@ -241,21 +240,6 @@ async def main():
             time.sleep(1)
             await send_worker()
             if refresh_count % 10 == 0:
-                driver.save_screenshot("login_page.png")
-                print("screnshort done")
-                try:
-                    with open("login_page.png", "rb") as photo:
-                        await bot.send_photo(chat_id="6427564982", photo=photo)
-                except NetworkError as e:
-                    print("❌ Telegram NetworkError:", e)
-                    print("⏳ Retrying in 5 seconds...")
-                    await asyncio.sleep(5)
-                    try:
-                        with open("login_page.png", "rb") as photo:
-                            await bot.send_photo(chat_id="6427564982", photo=photo)
-                    except Exception as ex:
-                        print("❌ Failed again:", ex)
-
                 driver.refresh()
 
             refresh_count += 1
